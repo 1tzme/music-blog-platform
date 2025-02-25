@@ -11,11 +11,15 @@ const spotifyApi = new SpotifyWebApi({
 
 const getSpotifyToken = async () => {
     try {
+        console.log('Attempting to get Spotify token with:', {
+            clientId: process.env.SPOTIFY_CLIENT_ID,
+            clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+        });
         const data = await spotifyApi.clientCredentialsGrant();
         console.log('Spotify token response:', data.body);
         spotifyApi.setAccessToken(data.body['access_token']);
     } catch (error) {
-        console.error('Spotify auth error:', error);
+        console.error('Spotify auth error details:', error);
         throw new Error('Failed to get Spotify token: ' + error.message);
     }
 };
