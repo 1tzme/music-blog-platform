@@ -1,22 +1,25 @@
 require('dotenv').config();
 const SpotifyWebApi = require('spotify-web-api-node');
 
+console.log('SPOTIFY_CLIENT_ID:', process.env.SPOTIFY_CLIENT_ID);
+console.log('SPOTIFY_CLIENT_SECRET:', process.env.SPOTIFY_CLIENT_SECRET);
+
 const spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET
 });
 
-/* get spotify access token */
 const getSpotifyToken = async () => {
     try {
         const data = await spotifyApi.clientCredentialsGrant();
+        console.log('Spotify token response:', data.body);
         spotifyApi.setAccessToken(data.body['access_token']);
     } catch (error) {
+        console.error('Spotify auth error:', error);
         throw new Error('Failed to get Spotify token: ' + error.message);
     }
 };
 
-/* get info about song/album/playlist */
 const getSpotifyData = async (url) => {
     try {
         await getSpotifyToken();
